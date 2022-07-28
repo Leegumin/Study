@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>타임리프 유틸리티 메서드</title>
+	</head>
+	<body>
+		
+		<h1 th:text="'전달된 값 = ' + ${msg}"></h1>	
+		
+		
+	
+		
+		
+		<!-- 
+			#strings.equals()
+			설명:
+				#strings.equals()		: 같은지 비교. 띄어쓰기, 대/소문자 일치.
+				th:if 사용 시				: 조건이 참이면 출력.
+				th:text 사용 시			: true / false 로 결과를 반환.	
+				th:unless				: Not if 로 해석. (타임리프 초보자에게는 상당히 생경. 사용이 조금 헤갈릴 수 있음) 	
+		-->
+		<h1 th:text="${#strings.equals(msg, 'Hello World')}" style="color: red">if 사용 시 조건이 참이면 이 문장이 보여요~</h1>
+	
+	
+	
+	
+	
+		<!--
+			#strings.isEmpty()
+			설명:
+				#strings.isEmpty()		: 전달된 변수에 값이 비었는지를 체크. 
+				th:text 사용 시			: true / false 로 결과를 반환. "비어있냐?" 라고 묻는 것이므로 비어있다면 true(네)라고 출력.
+				th:if / unless
+		-->
+		<h1 th:text="${#strings.isEmpty(msg)}" style="color: blue">현재 값이 비어있지 않으므로 false로 출력</h1>
+		
+		
+		
+		
+		
+		<!-- 
+			#strings.contains()
+			설명:
+				#strings.contains() : 전달된 변수에 특정 문자열이 포함되었는지를 체크.
+				th:text 사용 시		: true / false 로 결과를 반환. "포함되었냐?" 라고 묻는 것이므로 포함되었다면 true(네)라고 출력.
+				th:if / unless
+		-->
+		<h1 th:text="${#strings.contains(msg, 'Worldasdfasdf')}">포함되지 않았으므로 false 출력</h1>
+
+
+
+
+		
+		<!-- 
+			th:if 조건과 th:block 함께 사용
+			설명:
+				th:block 은 태그 요소 없이 사용하고자 할 때 사용할 수 있다.
+				보통은 태그 안쪽에 타임리프 문법이 기술되서 값을 대체하거나 th:block 은 태그에 의존하지 않고 독자적으로 사용. 렌더링 X.
+				먼저 isEmpty로 변수가 비어있는지를 체크.
+				true 라면 변수가 비어있다라는 뜻이므로 != true 로 비교하여 필요한 조건문을 수행하도록 처리.
+		-->
+		<h1 th:text="${#strings.isEmpty(msg)}" style="color: green">먼저 isEmpty로 변수가 비어있는지를 체크</h1>
+		<th:block th:if="${#strings.isEmpty(msg)} != true">
+			<h1 th:text="${#strings.contains(msg, 'Hello World~~~~~~~~')}" style="color: deeppink"></h1>
+		</th:block>
+		
+		
+		
+		
+		
+		<!-- 
+			th:if / unless + th:block
+			설명:
+				보통의 프로그래밍 언어에서 조건문으로 사용하는 if ~ else 구문의 else에 해당하는 타임리프 구문.
+				Not if 로 해석.
+				unless 사전적인 뜻 : ~하지 않는 한, ~이 아닌 한; ~한 경우 외에는 (다시 말해 너만 아니면 돼~~~~~~~~~~~~ ㅎ)
+				조금 특이한건 if 없이도 사용이 가능 - th:unless="조건"
+		-->
+		<h1 th:if="${#strings.isEmpty(msg)}">aaa</h1>
+		<h1 th:unless="${#strings.isEmpty(msg)}">bbb (unless는 Not if 이므로 msg에 값이 있다면 이 문장이 보임)</h1>
+
+
+
+
+
+		<!-- 
+			문제: th:if 조건과 th:block 등을 함께 사용하여 위에서 작성한 예를 변수(with)를 사용해서 재작성해보시오? 
+			설명: 앞서 배운 변수 생성 구문인 with 속성을 사용해서 변수를 만들어서 if 조건 등에서 사용해본다. 
+		-->
+		<th:block th:with="msgValue = ${#strings.isEmpty(msg)}">
+			<h1 th:text="'msgValue의 값은 = ' + ${msgValue}"></h1>
+			<th:block th:if="${ !msgValue and (#strings.contains(msg, 'Hello')) }">
+				<button>BUTTON</button>
+			</th:block>
+		</th:block>
+		
+		
+				
+		
+		
+	</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

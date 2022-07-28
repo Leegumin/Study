@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>체크박스 Form 값 전달하고 받기</title>
+	</head>
+	<body>
+	
+		<h1>Checkbox Form Page</h1>
+		
+		<h3 th:text="${msg}"></h3>
+		<h3 th:text="${emailList}"></h3>
+		
+		<!-- Form -->
+		<!-- 
+			설명:
+				체크박스 처리를 위해 자바스크립트(제이쿼리)를 이용해도 되고, 타임리프를 이용하는 것도 가능.
+				아무튼 배열로 처리. HTML5 에서는 기본적으로 체크박스 Form name 값이 같으면 자동으로 배열로 전송.
+				체크여부는 checked 속성으로 판단. 이 속성이 있으면 체크.
+				
+				그런데 황당한건(?) checked="false" 라고 되어있어도 체크가 되어진다.
+				그냥 checked 속성만 적어줘도 체크. 재미난건 checked="asdf" 의미없는 값도 적어주면 체크.
+				예) <input type="checkbox" name="email" value="test" checked="false"> 테스트
+				
+				따라서, 체크를 안하고 싶다면 checked 속성 자체를 없애야 한다.
+				타임리프에서는 좀 더 편리하게 true, false 값을 사용해서 처리할 수 있도록 함.
+				th:checked 값이 false 이면 checked 속성 자체를 제거.
+				------------------------------------------------------------------------------------
+				
+				value 값 지정이 없으면 on 으로 전달.
+				체크박스가 하나라면 타입을 boolean으로 해서 선택상태를 참/거짓으로 전달해서 처리.
+				라디오버튼, 셀렉트 폼들은 선택된 항목의 값을 String 값으로 전달.
+				
+				체크박스 하나도 체크하지 않았을 때 처리는?
+				1. 자바스크립트(제이쿼리)로 한 개 이상 체크하도록 구현.
+				2. 컨트롤러에서 뭔가 처리.
+		-->
+		<form action="/thymeleaf-test13" method="POST" style="line-height: 2">
+			사용하는 메일은?
+			<br>
+			
+			<th:block th:if="${#strings.isEmpty(emailList)} != true">
+				<input type="checkbox" name="email" value="gmail" th:checked="${#strings.contains(emailList, 'gmail')}"> 지메일
+			</th:block>
+			<th:block th:unless="${#strings.isEmpty(emailList)} != true">
+				<input type="checkbox" name="email" value="gmail" th:checked="false"> 지메일
+			</th:block>
+					
+			<input type="checkbox" name="email" value="kakao" th:if="${#strings.isEmpty(emailList)} != true" th:checked="${#strings.contains(emailList,'kakao')}">
+			<input type="checkbox" name="email" value="kakao" th:unless="${#strings.isEmpty(emailList)} != true" th:checked="false"> 
+			카카오메일
+					
+			<input type="checkbox" name="email" value="hotmail" th:if="${#strings.isEmpty(emailList)} != true" th:checked="${#strings.contains(emailList,'hotmail')}">
+			<input type="checkbox" name="email" value="hotmail" th:unless="${#strings.isEmpty(emailList)} != true" th:checked="false"> 
+			핫메일
+
+			<input type="checkbox" name="email" value="naver" th:if="${#strings.isEmpty(emailList)} != true" th:checked="${#strings.contains(emailList,'naver')}">
+			<input type="checkbox" name="email" value="naver" th:unless="${#strings.isEmpty(emailList)} != true" th:checked="false"> 
+			네이버메일
+
+			<br>
+			<input type="submit" value="Send">
+		</form>
+		
+		<!-- Result -->
+		<h1 th:text="${emailList}"></h1>
+		<table border=1 cellpadding=10>
+			<tr th:each="emailItem, idx : ${emailList}">
+				<td th:text="${idx.index+1}"></td>
+				<td th:text="${emailItem}"></td>
+			</tr>
+		</table>
+		
+	</body>
+</html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

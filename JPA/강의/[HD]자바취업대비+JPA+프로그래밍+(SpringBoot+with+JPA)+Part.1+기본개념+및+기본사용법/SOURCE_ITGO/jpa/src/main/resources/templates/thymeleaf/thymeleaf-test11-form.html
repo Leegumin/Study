@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>여러 개의 Form 값 전달하고 주고 받기 - DTO 활용</title>
+	</head>
+	<body>
+	
+		<h1>Multi Form Page</h1>
+		
+		<h3 th:utext="${msg}"></h3>
+		
+		<form action="/thymeleaf-test11" method="POST" th:object="${formData}">
+			
+			아이디? <input type="text" name="id" th:value="*{id}"><br>
+			이름은? <input type="text" name="name" th:value="*{name}"><br>
+			메일은? <input type="text" name="email" th:value="*{email}"><br>
+			나이는? <input type="text" name="age" th:value="*{age}"><br>
+			성별은? <input type="text" name="gender" th:value="*{gender}"><br><br>
+			
+			<input type="submit" value="Send">
+		</form>
+
+	</body>
+</html>

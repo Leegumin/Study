@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>파라미터 전달</title>
+	</head>
+	<body>
+
+		<h3 th:utext="${num} + '단<br><br>' + ${rst}"></h3>
+		<!-- 
+			주의!
+				타임리프로 변수 값 출력 시 html 태그가 포함된 내용을 출력할 때는 th:utext를 사용하도록 한다.
+				안그러고 th:text를 사용하면 태그가 적용이 되지 않는다.
+				th:utext 에서 u는 unescape text를 의미.
+		-->
+		
+	</body>
+</html>

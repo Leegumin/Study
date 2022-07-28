@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+	<head>
+		<meta charset="UTF-8">
+		<title>컨트롤러에서 ModelAndView를 이용해서 데이터 뷰페이지(템플릿 파일)로 전달하기</title>
+	</head>
+	<body>
+		
+		<h1 th:text="${name}"></h1>
+		<h1 th:text="${age}"></h1>
+		<!-- 
+			주의!
+				타임리프 사용 시 변수명과 괄호 사이는 가급적 띄어쓰기 안하는게 좋다.
+				가독성을 위해서 한다면 해도 안되는 것은 아니나 객체의 값 등을 출력 시 오류가 날 수 있다.
+		-->
+		
+	</body>
+</html>
