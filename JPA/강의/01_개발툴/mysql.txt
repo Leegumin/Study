@@ -1,0 +1,7 @@
+https://dev.mysql.com/downloads/windows/installer/8.0.html
+
+설치가 진행이 안될경우(window installer가 실행되다가 갑자기 꺼짐)
+
+1. 작업관리자에서 window installer 종료
+2. 관리자권한으로 실행한 cdm으로 mysql 설치파일(msi파일)이 있는 경로로 이동
+3. .\mysql-installer-community-8.0.30.0.msi(설치파일 이름 확장자까지 포함되야함)
