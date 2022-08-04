@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<!--타임리프 문법을 사용하기 위해 필요한 임포트-->
+<html xmlns:th = "http://www.thymeleaf.org"
+      lang = "ko"
+>
+<head>
+    <meta charset = "UTF-8">
+    <title>타임리프 유틸리티 메서드 사용법 - 다양한 Form 값을 전달하고 받기 위해서</title>
+</head>
+<body>
+
+    <h1 th:text = "${msg}"></h1>
+
+    <!--*#strings.equals : 값이 같은지 비교 후 참, 거짓 리턴-->
+    <!--*th:if : 조건이 참이면 출력-->
+    <h1 th:if = "${#strings.equals(msg, 'Hello World')}"
+        style = "color: red"
+    >th:if 사용 시 조건이 참이면 문장이 보임</h1>
+    <!--*th:text : 참, 거짓 리턴-->
+    <h1 th:text = "${#strings.equals(msg, 'Hello World')}"
+        style = "color: blue"
+    ></h1>
+    <!--*th:unless : Not if와 동일(참, 거짓 값이 역전됨)-->
+    <h1 th:unless= "${#strings.equals(msg, 'HelloWorld')}"
+        style = "color: yellow"
+    >th:unless 사용 시 참, 거짓을 역전시킴('Hello World' == 'HelloWorld') -> 거짓</h1>
+
+    <!--*#strings.isEmpty() : 값이 비어 있으면 참, 값이 있으면 거짓-->
+    <h1 th:text= "${#strings.isEmpty(msg)}"
+        style = "color: aqua"
+    ></h1>
+
+    <!--*#strings.contains() : 전달된 변수에 특정 문자열이 포함되어 있는지 체크-->
+    <h1 th:text= "${#strings.contains(msg, 'He')}"
+        style = "color: blueviolet"
+    ></h1>
+
+    <!--*th:block : 태그의 역할을 함, 단 렌더링은 되지 않음(f12-요소를 보면 블럭 자체가 안보임)-->
+    <th:block th:unless="${(#strings.isEmpty(msg))}">
+        <h1 th:text="${#strings.contains(msg, 'Hello')}" style="color: deeppink"></h1>
+    </th:block>
+</body>
+</html>
