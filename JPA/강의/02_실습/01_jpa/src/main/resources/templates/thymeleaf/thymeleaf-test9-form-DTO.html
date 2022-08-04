@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<!--타임리프 문법을 사용하기 위해 필요한 임포트-->
+<html xmlns:th = "http://www.thymeleaf.org"
+      lang = "ko"
+>
+<head>
+    <meta charset = "UTF-8">
+    <title>여러 Form 값 전달하고 받기 - DTO</title>
+</head>
+<body>
+    <div>
+        <h1>DTO Page</h1>
+        <!--input값 출력 위치-->
+        <h3 th:utext = "${msg}"></h3>
+        <!--* /thymeleaf-test7-form 주소로 "post" 방식을 취함-->
+        <!--* th:object -> Controller에서 객체를 받을 수 있음-->
+        <form action = "/thymeleaf-test9-form-dto"
+              method = "post"
+              th:object="${formDTO}"
+        >
+            <!--*name : Controller에서 읽어올 데이터 이름-->
+            <!--*th:value : Controller에서 읽어올 데이터 값을 넣어줄 수 있음-->
+            <!--*{} : 받아온 객체(formDTO)에서 요소를 불러낼 수 있음-->
+            <label for = "id"> 아이디 :
+                <input type = "text"
+                       name = "id"
+                       id = "id"
+                       th:value = "*{id}"
+                >
+            </label><br>
+            <label for = "name"> 이름&nbsp;&nbsp;&nbsp; :
+                <input type = "text"
+                       name = "name"
+                       id = "name"
+                       th:value = "*{name}"
+                >
+            </label><br>
+            <label for = "email"> 이메일 :
+                <input type = "text"
+                       name = "email"
+                       id = "email"
+                       th:value = "*{email}"
+                >
+            </label><br>
+            <label for = "age"> 나이&nbsp;&nbsp;&nbsp; :
+                <input type = "text"
+                       name = "age"
+                       id = "age"
+                       th:value = "*{age}"
+                >
+            </label><br>
+            <label for = "gender"> 성별&nbsp;&nbsp;&nbsp; :
+                <input type = "text"
+                       name = "gender"
+                       id = "gender"
+                       th:value = "*{gender}"
+                >
+            </label><br>
+            <label for = "submit">
+                <input type = "submit"
+                       id = "submit"
+                       value = "Send"
+                >
+            </label>
+        </form>
+    </div>
+</body>
+</html>

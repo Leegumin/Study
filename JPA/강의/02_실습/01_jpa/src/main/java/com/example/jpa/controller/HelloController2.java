@@ -1,8 +1,10 @@
 package com.example.jpa.controller;
 
+import com.example.jpa.dto.FormDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -92,15 +94,37 @@ public class HelloController2 {
 
         return mav;
     }
-    
-    // MultiForm 값 보내기2 - DTO 객체 활용
-    @RequestMapping(value = "/thymeleaf-test8-form-multiparam", method = RequestMethod.POST)
-    public ModelAndView postDTOMultiForm(ModelAndView mav) {
-        logger.info("postMultiForm 실행 됐어요~");
-        // 뷰 페이지 설정
-        mav.setViewName("thymeleaf-test8-form-multiParam");
-        // 데이터 설정
 
+    // MultiForm 값 보내기2 - DTO 객체 활용
+    @RequestMapping(value = "/thymeleaf-test9-form-dto", method = RequestMethod.GET)
+    public ModelAndView getDTOForm(ModelAndView mav,
+                                   @ModelAttribute
+                                   FormDTO formDTO) {
+        logger.info("getDTOForm 실행 됐어요~");
+        // 뷰 페이지 설정
+        mav.setViewName("thymeleaf-test9-form-DTO");
+        // 데이터 설정
+        mav.addObject("msg", "아래 여러 폼 값을 입력해주시고 전송(Send) 버튼을 클릭하세요 :)");
+        // *formDTO의 값이 없을 때 뷰페이지단의 th:object에서 오류를 일으키기 때문에 빈 값을 정의해서 넘겨줘야함
+        mav.addObject("formDTO", formDTO);
+
+        logger.info(formDTO.toString());
+        return mav;
+    }
+
+    // MultiForm 값 보내기2 - DTO 객체 활용
+    // *@ModelAttribute("만들 데이터객체 이름 <- 생략가능") : getter, setter를 통해 DTO에 값을 주입할 수 있는 어노테이션
+    @RequestMapping(value = "/thymeleaf-test9-form-dto", method = RequestMethod.POST)
+    public ModelAndView postDTOForm(ModelAndView mav,
+                                    @ModelAttribute
+                                    FormDTO formDTO) {
+        logger.info("postDTOForm 실행 됐어요~");
+        // 뷰 페이지 설정
+        mav.setViewName("thymeleaf-test9-form-DTO");
+        // 데이터 설정
+        mav.addObject("formDTO", formDTO);
+
+        logger.info(formDTO.toString());
         return mav;
     }
 }
