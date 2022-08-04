@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<!--타임리프 문법을 사용하기 위해 필요한 임포트-->
+<html xmlns:th = "http://www.thymeleaf.org"
+      lang = "ko"
+>
+<head>
+    <meta charset = "UTF-8">
+    <title>Form 값 전달하고 받기</title>
+</head>
+<body>
+    <div>
+        <h1>Form Page</h1>
+        <!--input값 출력 위치-->
+        <h3 th:utext = "${msg}"></h3>
+        <!--* /thymeleaf-test7-form 주소로 "post" 방식을 취함-->
+        <form action = "/thymeleaf-test7-form" method="post">
+            <label>
+                <!--*"data1" : Controller에서 읽어올 데이터 이름-->
+                <!--*th:value : Controller에서 읽어올 데이터 값을 넣어줄 수 있음-->
+                <input type = "text" name="data1" th:value="${data1}">
+                <input type = "submit" value="Send">
+            </label>
+        </form>
+    </div>
+</body>
+</html>

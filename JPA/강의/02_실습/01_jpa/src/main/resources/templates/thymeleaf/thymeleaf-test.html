@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<!--타임리프 문법을 사용하기 위해 필요한 임포트-->
+<html xmlns:th = "http://www.thymeleaf.org"
+      lang = "ko"
+>
+<head>
+    <meta charset = "UTF-8">
+    <title>타임리프 th:text 속성 사용 - 변수의 빈 값 체크해주기</title>
+</head>
+<body>
+    <!--th:text - 최종 렌더링 결과를 해당 텍스트로 대체함-->
+    <!--*원래 텍스트 값은 써주지 않아도 상관없음, th:text의 값이 없으면 오류가 남-->
+    <!--*한글을 사용하고 싶을 경우 || 사이에 값을 넣어줄 것 -> 안그러면 오류 터짐-->
+    <!--*한글을 사용하고 싶을 경우 '' 사이에 값을 넣어줄 것 -> 안그러면 오류 터짐-->
+    <h1 th:text = "|대체하는 텍스트|"> 대체당할 텍스트</h1>
+    <h1 th:text = "'대체하는 텍스트'"> 대체당할 텍스트</h1>
+
+    <!--th:with - 변수를 정의함, <div th:with="변수이름=${'변수값'}">-->
+    <!--*th:text와 달리 변수 값이 없어도 오류가 안남-->
+    <div th:with = "firstVal=${'작동 되나?'}, secondVal=${''}">
+        <!--fisrtVal 변수 출력-->
+        <h1 th:text = "${firstVal}"> 대체당할 텍스트</h1>
+        <!--secondVal 변수 삼항 연산자로 조건 출력-->
+        <h1 th:text = "${secondVal == '' ? '빈 값입니다.' : secondVal}"></h1>
+        <!--secondVal 변수 th:if로 조건 출력-->
+        <h1 th:if = "${secondVal == ''}"
+            th:text = "|기본 값|"
+        ></h1>
+    </div>
+</body>
+</html>

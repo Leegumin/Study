@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<!--타임리프 문법을 사용하기 위해 필요한 임포트-->
+<html xmlns:th = "http://www.thymeleaf.org"
+      lang = "ko"
+>
+<head>
+    <meta charset = "UTF-8">
+    <title>ModelAndView 이용한 데이터 전달</title>
+</head>
+<body>
+    <div>
+        <h1 th:text = "'data1 : ' + ${data1}"></h1>
+        <h1 th:text = "'data2 : ' + ${data2}"></h1>
+        <h1 th:text = "'data3 : ' + ${data3}"></h1>
+    </div>
+</body>
+</html>
