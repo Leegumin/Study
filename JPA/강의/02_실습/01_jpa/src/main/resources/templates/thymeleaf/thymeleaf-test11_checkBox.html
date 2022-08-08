@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<!--타임리프 문법을 사용하기 위해 필요한 임포트-->
+<html xmlns:th = "http://www.thymeleaf.org"
+      lang = "ko"
+>
+<head>
+    <meta charset = "UTF-8">
+    <title>체크박스 Form 값 전달하고 받기</title>
+</head>
+<body>
+    <h1>CheckBox Form Page</h1>
+    <h3 th:text = "${msg}"></h3>
+    <form action = "/thymeleaf-test11-checkbox"
+          method = "post"
+          style = "line-height: 2; font-size: medium"
+    >
+        <!--post로 넘어온 emailList-->
+        <h2>사용하는 이메일은 무엇인가요?</h2>
+        <h3 th:text = "${emailList}"></h3>
+        <!--*th:checked : 일반적인 checked는 속성이 들어가만 있어도 체크가 되어지기 때문에 true, false를 사용하여 조정할 수 있도록 하는 타임리프 속성-->
+        <!--*value 값 지정이 없으면 on 으로 전달함 -> checkBox가 하나일 때 타입을 boolean으로 전달해서 처리-->
+        <!--*라디오버튼, 셀렉트 폼들은 선택된 항목의 값을 String값으로 전달함-->
+        <!--*checkBox가 하나도 선택되지 않았을 때의 처리 방법
+            *1. 자바스크립트(혹은 제이쿼리)로 한 개 이상 체크하도록 구현
+            *2. 컨트롤러에서 처리-->
+        <!--*if, unless를 같이 써주지 않을 경우 emailList가 null일 때 즉, GET일 때 오류가 터지기 때문에 emailList가 비어있는 경우를 만들고 th:checked를 false로 직접 넣어줘야함-->
+
+        <!--th:block를 사용할 경우-->
+        <th:block th:if = "${!(#strings.isEmpty(emailList))}">
+            <input type = "checkbox"
+                   name = "email"
+                   value = "gMail"
+                   th:checked = "${#strings.containsIgnoreCase(emailList, 'gmail')}"
+            >gmail
+        </th:block>
+        <th:block th:unless = "${!(#strings.isEmpty(emailList))}">
+            <input type = "checkbox"
+                   name = "email"
+                   value = "gMail"
+                   th:checked = "false"
+            >gmail
+        </th:block>
+
+        <!--input에 직접 조건을 설정할 경우-->
+        <!--*checkBox만 바꿔주면 되기 때문에 kakaomail은 한번만 써주면 됨-->
+        <input type = "checkbox"
+               name = "email"
+               value = "kakaoMail"
+               th:if = "${!(#strings.isEmpty(emailList))}"
+               th:checked = "${#strings.containsIgnoreCase(emailList, 'kakaomail')}"
+        >
+        <input type = "checkbox"
+               name = "email"
+               value = "kakaoMail"
+               th:unless = "${!(#strings.isEmpty(emailList))}"
+               th:checked = "false"
+        >kakaoMail
+
+        <input type = "checkbox"
+               name = "email"
+               value = "hotMail"
+               th:if = "${!(#strings.isEmpty(emailList))}"
+               th:checked = "${#strings.containsIgnoreCase(emailList, 'hotMail')}"
+        >
+        <input type = "checkbox"
+               name = "email"
+               value = "hotMail"
+               th:unless = "${!(#strings.isEmpty(emailList))}"
+               th:checked = "false"
+        >hotMail
+
+        <input type = "checkbox"
+               name = "email"
+               value = "naverMail"
+               th:if = "${!(#strings.isEmpty(emailList))}"
+               th:checked = "${#strings.containsIgnoreCase(emailList, 'hotMail')}"
+        >
+        <input type = "checkbox"
+               name = "email"
+               value = "naverMail"
+               th:unless = "${!(#strings.isEmpty(emailList))}"
+               th:checked = "false"
+        >naverMail
+        <br>
+        <input type = "submit"
+               value = "Send"
+        >
+    </form>
+
+    <table border = "1"
+           cellpadding = "4"
+    >
+        <tr>
+            <td>인덱스 정보</td>
+            <td>인덱스 출력</td>
+            <td>카운트 출력</td>
+            <td>이메일</td>
+        </tr>
+        <tr th:each="email, index : ${emailList}">
+            <td th:text="${index}"></td>
+            <td th:text="${index.index}"></td>
+            <td th:text="${index.count}"></td>
+            <td th:text="${email}"></td>
+        </tr>
+    </table>
+</body>
+</html>

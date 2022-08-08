@@ -21,23 +21,34 @@
         style = "color: blue"
     ></h1>
     <!--*th:unless : Not if와 동일(참, 거짓 값이 역전됨)-->
-    <h1 th:unless= "${#strings.equals(msg, 'HelloWorld')}"
+    <h1 th:unless = "${#strings.equals(msg, 'HelloWorld')}"
         style = "color: yellow"
     >th:unless 사용 시 참, 거짓을 역전시킴('Hello World' == 'HelloWorld') -> 거짓</h1>
 
     <!--*#strings.isEmpty() : 값이 비어 있으면 참, 값이 있으면 거짓-->
-    <h1 th:text= "${#strings.isEmpty(msg)}"
+    <h1 th:text = "${#strings.isEmpty(msg)}"
         style = "color: aqua"
     ></h1>
 
     <!--*#strings.contains() : 전달된 변수에 특정 문자열이 포함되어 있는지 체크-->
-    <h1 th:text= "${#strings.contains(msg, 'He')}"
+    <h1 th:text = "${#strings.contains(msg, 'He')}"
         style = "color: blueviolet"
     ></h1>
 
     <!--*th:block : 태그의 역할을 함, 단 렌더링은 되지 않음(f12-요소를 보면 블럭 자체가 안보임)-->
-    <th:block th:unless="${(#strings.isEmpty(msg))}">
-        <h1 th:text="${#strings.contains(msg, 'Hello')}" style="color: deeppink"></h1>
+    <th:block th:unless = "${!(#strings.isEmpty(msg))}">
+        <h1 th:text = "${#strings.contains(msg, 'z')}"
+            style = "color: deeppink"
+        ></h1>
+    </th:block>
+
+    <!--*th:with를 통한 boolean 매개변수로 설정하여 사용 -->
+    <th:block th:with = "msgValue = ${#strings.isEmpty(msg)}">
+        <h1 th:text = "'msgValue 값은 '+${msgValue}"></h1>
+        <!--*<th:block th:if = "${!msgValue and(==&&와 동일하게 작용함) (#strings.contains(msg, 'Hello'))}">-->
+        <th:block th:if = "${!msgValue && (#strings.contains(msg, 'Hello'))}">
+            <button>BUTTON</button>
+        </th:block>
     </th:block>
 </body>
 </html>
