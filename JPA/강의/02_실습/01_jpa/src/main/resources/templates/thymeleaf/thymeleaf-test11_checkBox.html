@@ -26,6 +26,7 @@
         <!--*if, unless를 같이 써주지 않을 경우 emailList가 null일 때 즉, GET일 때 오류가 터지기 때문에 emailList가 비어있는 경우를 만들고 th:checked를 false로 직접 넣어줘야함-->
 
         <!--th:block를 사용할 경우-->
+        <!--*th:if -> emailList가 비어있지 않으면 노출, th:checked -> 내용 포함 유무에 따른 체크-->
         <th:block th:if = "${!(#strings.isEmpty(emailList))}">
             <input type = "checkbox"
                    name = "email"
@@ -33,6 +34,7 @@
                    th:checked = "${#strings.containsIgnoreCase(emailList, 'gmail')}"
             >gmail
         </th:block>
+        <!--*th:unless -> emailList가 비어있으면 노출, th:checked -> 체크할 내용(emailList가)이 없기 때문에 무조건 false-->
         <th:block th:unless = "${!(#strings.isEmpty(emailList))}">
             <input type = "checkbox"
                    name = "email"
@@ -43,12 +45,14 @@
 
         <!--input에 직접 조건을 설정할 경우-->
         <!--*checkBox만 바꿔주면 되기 때문에 kakaomail은 한번만 써주면 됨-->
+        <!--*th:if -> emailList가 비어있지 않으면 노출, th:checked -> 내용 포함 유무에 따른 체크-->
         <input type = "checkbox"
                name = "email"
                value = "kakaoMail"
                th:if = "${!(#strings.isEmpty(emailList))}"
                th:checked = "${#strings.containsIgnoreCase(emailList, 'kakaomail')}"
         >
+        <!--*th:unless -> emailList가 비어있으면 노출, th:checked -> 체크할 내용(emailList가)이 없기 때문에 무조건 false-->
         <input type = "checkbox"
                name = "email"
                value = "kakaoMail"

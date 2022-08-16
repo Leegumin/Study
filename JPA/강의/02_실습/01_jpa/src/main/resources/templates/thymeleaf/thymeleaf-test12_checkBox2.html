@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<!--타임리프 문법을 사용하기 위해 필요한 임포트-->
+<html xmlns:th = "http://www.thymeleaf.org"
+      lang = "ko"
+>
+<head>
+    <meta charset = "UTF-8">
+    <title>체크박스 Form 값 전달하고 받기</title>
+</head>
+<body>
+    <h1>CheckBox Form Page</h1>
+    <h3 th:text = "${msg}"></h3>
+
+    <!--emailList가 비어있는지 먼저 확인-->
+    <h3 th:text = "'emailList 비었나요? : ' + ${#strings.isEmpty(emailList)}"
+        style = "color: red"
+    ></h3>
+
+    <h3 th:if = "${#strings.isEmpty(emailList)} != true"
+        th:text = "'체크한 값은? : ' + ${emailList}"
+    ></h3>
+
+    <h3 th:if = "${#strings.isEmpty(emailList)} != true"
+        th:text = "'emailList 변수에 kakao 포함되었나요? : ' + ${#strings.contains(emailList,'kakao')}"
+    ></h3>
+
+    <form action = "/thymeleaf-test12-checkbox"
+          method = "post"
+    >
+        <!--Get-->
+        <!--*checkItems의 값이 비어있을 때 노출-->
+        <th:block th:if = "${#strings.isEmpty(checkItems)}">
+            <table border = "0"
+                   cellpadding = "10"
+            >
+                <!--Email-->
+                <tr>
+                    <td style = "background: #dddddd; width: 100px">이메일</td>
+                    <td><input type = "checkbox"
+                               name = "email"
+                               value = "gmail"
+                               th:checked = "false"
+                    >gmail
+                    </td>
+                    <td><input type = "checkbox"
+                               name = "email"
+                               value = "kakao"
+                               th:checked = "false"
+                    >kakao
+                    </td>
+                    <td><input type = "checkbox"
+                               name = "email"
+                               value = "hotmail"
+                               th:checked = "false"
+                    >hotmail
+                    </td>
+                    <td><input type = "checkbox"
+                               name = "email"
+                               value = "naver"
+                               th:checked = "false"
+                    >naver
+                    </td>
+                </tr>
+                <!--Gender-->
+                <tr>
+                    <td style = "background: #ddd; width: 100px">성별</td>
+                    <td><input type = "radio"
+                               name = "gender"
+                               value = "male"
+                    >Male
+                    </td>
+                    <td><input type = "radio"
+                               name = "gender"
+                               value = "female"
+                    >Female
+                    </td>
+                </tr>
+                <!--Age-->
+                <tr>
+                    <td style = "background: #ddd; width: 100px">연령대</td>
+                    <td>
+                        <!--*size : 한 번에 몇개씩 보여줄 건지 크기 결정-->
+                        <select name = "age"
+                                size = "1"
+                        >
+                            <!--*selected : checkbox의 checked와 같음-->
+                            <option value = "10"
+                                    selected
+                            >10
+                            </option>
+                            <option value = "20">20</option>
+                            <option value = "30">30</option>
+                            <option value = "40">40</option>
+                            <option value = "50">50</option>
+                            <option value = "60">60 이상</option>
+                        </select>
+                    </td>
+                </tr>
+                <!--Accepted-->
+                <tr>
+                    <td style = "background: #ddd; width: 140px">메일 수신여부</td>
+                    <td><input type = "checkbox"
+                               name = "mconsent"
+                               value = "on"
+                               th:checked = "false"
+                    >동의함
+                    </td>
+                </tr>
+            </table>
+            <input type = "submit"
+                   value = "Send"
+            >
+        </th:block>
+
+        <!--Post-->
+        <!--*checkItems의 값이 비어있지 않을 때 노출-->
+        <th:block th:if = "${!(#strings.isEmpty(checkItems))}">
+            <table border = "0"
+                   cellpadding = "10"
+            >
+                <!--Email-->
+                <tr>
+                    <td style = "background: #dddddd; width: 100px">이메일</td>
+                    <!--*post에서 기본적인 리스트를 뿌려줌(checkItems)-->
+                    <!--*${emailList != null} -> 생각을 잘 해야됨. ${emailList}로 작업하면 boolean값이 아니라 emailList값이 checkedEmail로 저장됨-->
+                    <td th:with = "checkedEmail = ${emailList != null}"
+                        th:each = "checkItem : ${checkItems}"
+                    >
+                        <!--*th:checked = get에서 보내준 emailList에 checkItem이 포함돼 있으면 true, 없으면 false-->
+                        <!--*th:with = emailList가 있으면 checkedEmail true, 없으면 false-->
+                        <input type = "checkbox"
+                               name = "email"
+                               th:value = "${checkItem}"
+                               th:checked = "${checkedEmail && (#strings.contains(emailList, checkItem))}"
+                        >
+                        <th:block th:text = "${checkItem}"></th:block>
+                    </td>
+                </tr>
+                <!--Gender-->
+                <tr>
+                    <td style = "background: #ddd; width: 140px">성별</td>
+                    <td><input type = "radio"
+                               name = "gender"
+                               value = "male"
+                               th:checked = "${gender} == 'male'"
+                    >Male
+                    </td>
+                    <td><input type = "radio"
+                               name = "gender"
+                               value = "female"
+                               th:checked = "${gender} == 'female'"
+                    >Female
+                    </td>
+                </tr>
+                <!--Age-->
+                <tr>
+                    <td style = "background: #ddd; width: 100px">연령대</td>
+                    <td>
+                        <!--*size : 한 번에 몇개씩 보여줄 건지 크기 결정-->
+                        <select name = "age"
+                                size = "1"
+                        >
+                            <!--*selected : checkbox의 checked와 같음-->
+                            <option value = "10"
+                                    th:selected = "${age == '10'}"
+                            >10
+                            </option>
+                            <option value = "20"
+                                    th:selected = "${age == '20'}"
+                            >20
+                            </option>
+                            <option value = "30"
+                                    th:selected = "${age == '30'}"
+                            >30
+                            </option>
+                            <option value = "40"
+                                    th:selected = "${age == '40'}"
+                            >40
+                            </option>
+                            <option value = "50"
+                                    th:selected = "${age == '50'}"
+                            >50
+                            </option>
+                            <option value = "60"
+                                    th:selected = "${age == '60'}"
+                            >60 이상
+                            </option>
+                        </select>
+                    </td>
+                </tr>
+                <!--Accepted-->
+                <tr>
+                    <td style = "background: #ddd; width: 140px">메일 수신여부</td>
+                    <td><input type = "checkbox"
+                               name = "mconsent"
+                               value = "on"
+                               th:checked = "${mconsent == 'on'}"
+                    >동의함
+                    </td>
+                </tr>
+            </table>
+            <input type = "submit"
+                   value = "Send"
+            >
+        </th:block>
+    </form>
+</body>
+</html>
