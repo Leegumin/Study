@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang = "en">
+<head>
+    <meta charset = "UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <main>
+        <button id = "MemberList" onclick="location.href='/jpa/memberList';">JPA Member List</button>
+        <button id = "MemberRegistration" onclick="location.href='/jpa/memberRegistration';">JPA Member Registration</button>
+    </main>
+</body>
+
+<style>
+    * {
+        margin: 0;
+    }
+
+    main {
+        border: 0 solid;
+        /* *vw = vertical width, vh = vertical height*/
+        width: 100vw;
+        height: 100vh;
+        background: #ddd;
+
+        /*정렬*/
+        display: flex;
+        /* *가운데 정렬(가로)*/
+        justify-content: center;
+        /* *가운데 정렬(세로)*/
+        align-items: center;
+        /* *자식요소 수직 정렬*/
+        flex-direction: column;
+    }
+
+    main > button {
+        width: 300px;
+        height: 70px;
+        color: white;
+        background: red;
+        padding: 20px   40px;
+        border-radius: 100px;
+        border: none;
+        font-size: 1em;
+        cursor: pointer;
+        margin: 10px 0;
+    }
+
+    /* *nth-child(순서(인덱스 말고), 혹은 짝수홀수(짝수 : even or 2n, 홀수 : odd or n) 등등)*/
+    main > button:nth-child(2) {
+        background: blue;
+    }
+</style>
+
+</html>
