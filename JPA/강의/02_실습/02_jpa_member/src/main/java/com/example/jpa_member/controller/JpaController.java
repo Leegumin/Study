@@ -10,6 +10,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 
 /**
@@ -35,13 +36,27 @@ public class JpaController {
     // 등록 처리(신규회원)
     // *등록 폼
     @RequestMapping(value = "/jpa/memberRegistration", method = RequestMethod.GET)
-    public String memberRegistration(Model model) {
+    public String memberRegistrationForm(Model model,
+                                     @RequestParam(value = "num", required = false)
+                                     Integer num) {
+        logger.info("memberRegistrationForm가 실행됨");
+        // 기존 회원 수정 ( 기본 키 값(num)이 있음 )
+        if (num != null) {
+            System.out.println(num);
+        }
+        // 신규 회원 등록 ( 기본 키 값(num)이 없음 )
+        else {
+            System.out.println("미등록된 회원입니다.");
+            model.addAttribute("memberDTO", new MemberDTO());
+            model.addAttribute("formTitle", "Registration");
+        }
         return "jpa/memberRegistration";
     }
 
-    // *등록 처리
-    @RequestMapping(value = "/jpa/memberRegistrationOk", method = RequestMethod.POST)
-    public String insertMember(Model model, MemberDTO memberDTO) {
+    // 등록 처리 (CREATE)
+    @RequestMapping(value = "/jpa/memberRegistration", method = RequestMethod.POST)
+    public String memberRegistration(Model model, MemberDTO memberDTO) {
+        logger.info("memberRegistration가 실행됨");
         try {
             logger.info("memberDTO : {}", memberDTO);
 
