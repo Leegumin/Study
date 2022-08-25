@@ -1,10 +1,80 @@
 <!DOCTYPE html>
-<html lang = "en">
+<html lang = "en"
+      xmlns:th = "http://www.thymeleaf.org"
+>
 <head>
     <meta charset = "UTF-8">
     <title>Title</title>
 </head>
 <body>
-    MemberList
+    <div>
+        <h2>Member List</h2>
+        <p>
+            <a href = "/">Main</a> / 현재
+            <span style = "font-weight: bold"
+                  th:text = "${#lists.size(members)}"
+            ></span>명의 회원정보가 등록되었습니다.
+        </p>
+        <table cellpadding = "10"
+               border = "1"
+        >
+
+            <thead>
+            <tr>
+                <th width = "50">Num</th>
+                <th>Name</th>
+                <th>Id</th>
+                <th>Phone</th>
+                <th>Edit</th>
+                <th>Del</th>
+                <th>ConfirmDel</th>
+            </tr>
+            </thead>
+
+            <tbody>
+            <tr th:each = "member : ${members}">
+                <th th:text = "${member.num}"></th>
+                <th th:text = "${member.name}"></th>
+                <th th:text = "${member.id}"></th>
+                <th th:text = "${member.phone}"></th>
+                <!-- *th:href="@{Controller에 요청하는 주소(요청 http 뒤에 붙을 매개변수)}">수정</a></th>-->
+                <th>
+                    <a href = "#"
+                       th:href = "@{/jpa/memberRegistration(num = ${member.num})}"
+                    >수정</a>
+                </th>
+                <th>
+                    <a href = "#"
+                       th:href = "@{/jpa/memberDelete(num = ${member.num})}"
+                    >바로삭제</a>
+                </th>
+                <th>
+                    <!--*매개변수를 자바스크립트에 넘겨주는 방법 1-->
+                    <!--<a href = "#"
+                       th:onclick = "btnDel([[${member.num}]])"
+                       style = "color: #ff0000"
+                    >컨펌삭제</a>-->
+                    <!--*매개변수를 자바스크립트에 넘겨주는 방법 2-->
+                    <!--!href의 주소에 #만 붙일 시 맨 메소드 취소를 할 경우 맨 위로 올라가는데 #none 같이 문자열을 붙여주면 스크롤이 그 위치에 그대로 있음-->
+                    <a href = "#none"
+                       th:num="${member.num}"
+                       th:onclick = "btnDel(this.getAttribute('num'))"
+                       style = "color: #ff0000"
+                    >컨펌삭제</a>
+                </th>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        // 삭제버튼 클릭 시 컨펌 후 처리
+        function btnDel (num) {
+            console.log(num)
+            if (confirm(num + '번 회원을 정말 삭제하시겠습니까?') === true) {
+                location.href = '/jpa/memberDelete?num=' + num
+            }
+        }
+    </script>
 </body>
 </html>

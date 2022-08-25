@@ -8,17 +8,27 @@
 </head>
 <body>
     <h1>
-        Member Registration Form
+        Member <span th:text="${formTitle}"></span> Form
     </h1>
 
-    <form action = "/jpa/memberRegistration"
+    <!--<form action = "/jpa/memberRegistration"
+          method = "post"
+          id = "memberRegistration"
+    >-->
+    <form th:action = "@{/jpa/memberRegistration}"
+          th:object = "${memberDTO}"
           method = "post"
           id = "memberRegistration"
     >
+        <!--신규회원인지, 등록된 회원인지 판별하기 위한 기본 키 값 num을 숨김으로 표시-->
+        <input type = "hidden" name="num" th:field="*{num}">
+
         <label for = "name">Name</label>
+        <!-- *th:field="*{name}" : Controller에서 받아온 값(memberDTO)을 뿌려주는 부분-->
         <input type = "text"
                id = "name"
                name = "name"
+               th:field = "*{name}"
         >
         <br>
 
@@ -26,6 +36,7 @@
         <input type = "text"
                id = "id"
                name = "id"
+               th:field = "*{id}"
         >
         <br>
 
@@ -33,14 +44,21 @@
         <input type = "text"
                id = "phone"
                name = "phone"
+               th:field = "*{phone}"
         >
         <br>
     </form>
 
     <!--*form 바깥에 버튼을 넣을 경우 form의 id를 넣어줘야함-->
-    <button type = "submit"
+    <!--<button type = "submit"
             form = "memberRegistration"
-    >회원등록</button>
+    >회원등록
+    </button>-->
+    <!-- *th:switch="" : 매개변수의 들어오는 값에 따라 출력 값을 결정-->
+    <div th:switch="${formTitle}">
+        <button type="submit" form="memberRegistration" th:case="Registration">회원등록</button>
+        <button type="submit" form="memberRegistration" th:case="Modification">회원수정</button>
+    </div>
 </body>
 
 <style>
@@ -48,6 +66,7 @@
         display: inline-block;
         width: 120px;
     }
+
     form > input {
         padding: 4px;
         margin-bottom: 4px;

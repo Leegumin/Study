@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
  * fileName : MemberRepository
  * author : Mingu
  * date : 2022-08-22
- * description : CRUDRepository 또는 JpaRepository를 상속받는 인터페이스
+ * description : CRUDRepository 또는 JpaRepository를 상속받는 인터페이스 CRUD를 실행하기 위해 만들어짐
  * ===========================================================
  * DATE            AUTHOR             NOTE
  * -----------------------------------------------------------
