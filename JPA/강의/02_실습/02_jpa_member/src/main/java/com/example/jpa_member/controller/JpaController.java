@@ -6,6 +6,8 @@ import com.example.jpa_member.repository.MemberRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -93,18 +95,56 @@ public class JpaController {
         return "redirect:/";
     }
 
-    // 회원 조회 (READ)
+    // 회원 전체 조회 (READ)
     @RequestMapping(value = "/jpa/memberList", method = RequestMethod.GET)
-    public String memberList(Model model) {
+    public String memberList(Model model, Pageable pageable) {
 
+        // 페이징 처리가 없을 때 회원 전체 조회
         // *멤버 데이터를 모두 찾아서 배열 형태로 정의
         // *JPA 방식이 아닌 경우의 처리
         // *List<MemberDTO> memberList = memberService.getMemberList();
-        List<Member> members = memberRepository.findAll();
+        /*List<Member> members = memberRepository.findAll();*/
+
+        // 페이징 처리가 있을 때 회원 전체 조회
+        // *페이징 관련해서 필요한 기능들 -> domain.Page, domain.Pageable, domain.Sort(정렬 관련)
+        // *size : 한 페이지당 노출 개수, page : 총 페이지 개수, sort : 정렬 옵션 등
+        // *페이지 번호는 0부터 시작함
+        // *처음 페이징 적용 시 size default 값은 20개
+        // *뷰 페이지단에서 적용할 값을 messages.properties 파일에 정의하고 사용할 수 있음
+        Page<Member> members = memberRepository.findAll(pageable);
+
+        // 페이징 관련 유용한 메서드
+        // *getTotalPages() : 총 페이지 수
+        System.out.println("getTotalPages = " + members.getTotalPages());
+        // *getTotalElements() : 총 데이터 개수
+        System.out.println("getTotalElements = " + members.getTotalElements());
+        // *getNumber() : 현재 페이지 번호
+        System.out.println("getNumber = " + members.getNumber());
+        // *getSize() : 한 페이지 보여지는 데이터 개수
+        System.out.println("getSize = " + members.getSize());
+        // *getSort() : 데이터 정렬
+        System.out.println("getSort = " + members.getSort());
+        // *getPageable() : size, number, sort 3가지 값을 보여줌
+        System.out.println("getSort = " + members.getPageable());
 
         model.addAttribute("members", members);
 
+
         return "jpa/memberList";
+    }
+
+    // 회원 상세 조회 (READ)
+    @RequestMapping(value = "/jpa/memberDetail", method = RequestMethod.GET)
+    public String memberDetail(Model model,
+                               @RequestParam(value = "num", required = false)
+                               Integer num) {
+        logger.info("num : {}", num);
+
+        // *num(기본 키 값)에 해당하는 회원 조회
+        Member member = memberRepository.findById(num).orElse(null);
+        model.addAttribute("member", member);
+
+        return "jpa/memberDetail";
     }
 
     // 회원 삭제 (DELETE)
