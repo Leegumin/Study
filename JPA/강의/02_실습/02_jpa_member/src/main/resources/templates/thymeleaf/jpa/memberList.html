@@ -1,102 +1,123 @@
 <!DOCTYPE html>
-<html lang = "en"
-      xmlns:th = "http://www.thymeleaf.org"
->
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset = "UTF-8">
-    <title>Title</title>
+<meta charset="UTF-8">
+<title>Title</title>
 </head>
 <body>
-    <div>
-        <h2>Member List</h2>
-        <p>
-            <a href = "/">Main</a> / 현재
-            <span style = "font-weight: bold"
-                  th:text = "${#lists.size(members)}"
-            ></span>명의 회원정보가 등록되었습니다.
-        </p>
-        <table cellpadding = "10"
-               border = "1"
-        >
+	<div>
+		<h2>Member List</h2>
+		<p>
+			<a href="/">Main</a>
+			/ 현재 <span style="font-weight: bold" th:text="${#lists.size(members)}"></span> 명의 회원정보가 등록되었습니다.
+		</p>
+		<!-- 검색 시작 -->
+		<form th:action="@{/jpa/memberList}" method="GET" style="padding: 10px; border: 1px; width: 600px;" id="searchKeywordForm">
+			<!-- 이름으로만 검색 -->
+			<!-- <label for="searchKeyword">이름</label> &nbsp; -->
+			<!-- 카테고리별로 검색으로 변경 -->
+			<select name="searchCategory">
+				<option value="name">이름</option>
+				<option value="id">아이디</option>
+				<option value="phone">휴대폰</option>
+			</select> &nbsp;
+			<input type="text" id="searchKeyword" name="searchKeyword">
+			&nbsp;
+			<button type="submit">Search</button>
+		</form>
+		<!-- 검색 종료 -->
+		<table cellpadding="10" border="1">
 
-            <thead>
-            <tr>
-                <th width = "50">Num</th>
-                <th>Name</th>
-                <th>Id</th>
-                <th>Phone</th>
-                <th>Edit</th>
-                <th>Del</th>
-                <th>ConfirmDel</th>
-            </tr>
-            </thead>
+			<thead>
+				<tr>
+					<th width="50">Num</th>
+					<th>Name</th>
+					<th>Id</th>
+					<th>Phone</th>
+					<th>Edit</th>
+					<th>Del</th>
+					<th>ConfirmDel</th>
+				</tr>
+			</thead>
 
-            <tbody>
-            <tr th:each = "member : ${members}">
-                <th th:text = "${member.num}"></th>
-                <th><a th:href = "@{/jpa/memberDetail(num = ${member.num})}"
-                       th:text = "${member.name}"
-                ></a></th>
-                <th th:text = "${member.id}"></th>
-                <th th:text = "${member.phone}"></th>
-                <!-- *th:href="@{Controller에 요청하는 주소(요청 http 뒤에 붙을 매개변수)}">수정</a></th>-->
-                <th>
-                    <a href = "#"
-                       th:href = "@{/jpa/memberRegistration(num = ${member.num})}"
-                    >수정</a>
-                </th>
-                <th>
-                    <a href = "#"
-                       th:href = "@{/jpa/memberDelete(num = ${member.num})}"
-                    >바로삭제</a>
-                </th>
-                <th>
-                    <!--*매개변수를 자바스크립트에 넘겨주는 방법 1-->
-                    <!--<a href = "#"
-                       th:onclick = "btnDel([[${member.num}]])"
-                       style = "color: #ff0000"
-                    >컨펌삭제</a>-->
-                    <!--*매개변수를 자바스크립트에 넘겨주는 방법 2-->
-                    <!--!href의 주소에 #만 붙일 시 맨 메소드 취소를 할 경우 맨 위로 올라가는데 #none 같이 문자열을 붙여주면 스크롤이 그 위치에 그대로 있음-->
-                    <a href = "#none"
-                       th:num = "${member.num}"
-                       th:onclick = "btnDel(this.getAttribute('num'))"
-                       style = "color: #ff0000"
-                    >컨펌삭제</a>
-                </th>
-            </tr>
-            </tbody>
-        </table>
-    </div>
-    <p>
-        총 레코드 갯수 <span style = "color: red; font-weight: bold">4</span><br>
-        현재 페이지 <span style = "color: green; font-weight: bold">4</span> /
-        총 페이지 <span style = "color: blue; font-weight: bold">4</span>
-    </p>
-    <ul>
-        <li><a href = "#">Previous</a></li>
-        <li>/</li>
-        <li><a href = "#">Next</a></li>
-    </ul>
-    <script>
-        // 삭제버튼 클릭 시 컨펌 후 처리
-        function btnDel (num) {
-            console.log(num)
-            if (confirm(num + '번 회원을 정말 삭제하시겠습니까?') === true) {
-                location.href = '/jpa/memberDelete?num=' + num
-            }
-        }
-    </script>
+			<tbody>
+				<tr th:each="member : ${members}">
+					<th th:text="${member.num}"></th>
+					<th>
+						<a th:href="@{/jpa/memberDetail(num = ${member.num})}" th:text="${member.name}"></a>
+					</th>
+					<th th:text="${member.id}"></th>
+					<th th:text="${member.phone}"></th>
+					<!-- *th:href="@{Controller에 요청하는 주소(요청 http 뒤에 붙을 매개변수)}">수정</a></th>-->
+					<th>
+						<a href="#" th:href="@{/jpa/memberRegistration(num = ${member.num})}">수정</a>
+					</th>
+					<th>
+						<a href="#" th:href="@{/jpa/memberDelete(num = ${member.num})}">바로삭제</a>
+					</th>
+					<th>
+						<!--*매개변수를 자바스크립트에 넘겨주는 방법 1-->
+						<!-- <a href="#" th:onclick="btnDel([[${member.num}]])" style="color: #ff0000">컨펌삭제</a> -->
+						<!--*매개변수를 자바스크립트에 넘겨주는 방법 2-->
+						<!--!href의 주소에 #만 붙일 시 맨 메소드 취소를 할 경우 맨 위로 올라가는데 #none 같이 문자열을 붙여주면 스크롤이 그 위치에 그대로 있음-->
+						<a href="#none" th:num="${member.num}" th:onclick="btnDel(this.getAttribute('num'))" style="color: #ff0000">컨펌삭제</a>
+					</th>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+	<p>
+		<!-- ${members.totalElements} : members 객체의 총 요소 개수-->
+		총 레코드 갯수 <span style="color: red; font-weight: bold" th:text="${members.totalElements}"></span> <br>
+		<!-- ${members.number} : members 객체의 현재 페이지 수(기본적으로 0부터 시작하기 때문에 +1을 해줘야함)-->
+		<!--방법1-->
+		현재 페이지 <span style="color: green; font-weight: bold" th:text="${members.pageable.pageNumber+1}"></span>
+		<!--방법2-->
+		<!-- 현재 페이지 <span style="color: green; font-weight: bold" th:text="${members.number+1}"></span> -->
+		/
+		<!-- ${members.totalPages} : members 객체의 총 페이지 개수-->
+		총 페이지 <span style="color: blue; font-weight: bold" th:text="${members.totalPages}"></span>
+	</p>
+	<ul>
+		<!-- th:href="@{/jpa/memberList(page=1, size=2)}" : page -> 현재 페이지, size -> 페이지 출력 개수로 주소를 요청 -->
+		<!-- 뒤로가기 -->
+		<li th:if="${members.number == 0}"><span style="color: #999;">Previous</span></li>
+		<!-- size=#{paging.size})} : messages.properties에서 설정한 페이지 사이즈 -->
+		<!-- 변경 전 : <li th:unless="${members.number == 0}"><a href="#" th:href="@{/jpa/memberList(page=${members.number-1}, size=#{paging.size})}">Previous</a></li> -->
+		<!-- JpaController에서 페이징 기본 값을 지정해 줬기 때문에 size 값을 날림 -->
+		<li th:unless="${members.number == 0}"><a href="#" th:href="@{/jpa/memberList(page=${members.number-1})}">Previous</a></li>
+		<li>/</li>
+		<!-- 앞으로가기 -->
+		<li th:if="${members.totalPages == members.number+1}"><span style="color: #999;">Next</span></li>
+		<!-- 변경 전 : <li th:unless="${members.totalPages == members.number+1}"><a href="#" th:href="@{/jpa/memberList(page=${members.number+1}, size=#{paging.size})}">Next</a></li> -->
+		<!-- JpaController에서 페이징 기본 값을 지정해 줬기 때문에 size 값을 날림 -->
+		<li th:unless="${members.totalPages == members.number+1}"><a href="#" th:href="@{/jpa/memberList(page=${members.number+1})}">Next</a></li>
+	</ul>
+	<script>
+		// 삭제버튼 클릭 시 컨펌 후 처리
+		function btnDel(num) {
+			console.log(num)
+			if (confirm(num + '번 회원을 정말 삭제하시겠습니까?') === true) {
+				location.href = '/jpa/memberDelete?num=' + num
+			}
+		}
+	</script>
 
 </body>
 <style>
-    ul > li {
-        display: inline-block;
-        border: 0 solid;
-        padding: 10px;
-    }
-    ul {
-        margin-left: -50px;
-    }
+ul>li {
+	display: inline-block;
+	border: 0 solid;
+	padding: 10px;
+}
+
+ul {
+	margin-left: -50px;
+}
+
+#searchKeywordForm {
+	display: flex;
+	justify-content: flex-end;
+}
 </style>
 </html>

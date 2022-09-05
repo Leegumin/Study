@@ -1,12 +1,16 @@
 <!DOCTYPE html>
-<html lang = "en">
+<html lang="ko" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset = "UTF-8">
     <title>Title</title>
 </head>
 <body>
     <main>
-        <button id = "MemberList" onclick="location.href='/jpa/memberList';">JPA Member List</button>
+		<!-- 변경전 : <button id = "MemberList" onclick="location.href='/jpa/memberList?page=0&size=2';">JPA Member List</button> -->
+		<!-- 'location.href=\', ' + @{/jpa/memberList(page=0, size=3)} + ', \''  : ''만 있으면 오류가 나기 때문에 \'' 형태로 들어감-->
+		<!-- 변경전 : <button id = "MemberList" th:onclick="'location.href=\'' + @{/jpa/memberList(page=0, size=#{paging.size})}+ '\''">JPA Member List</button> -->
+		<!-- JpaController에서 페이징 기본 값을 지정해 줬기 때문에 size 값을 날림 -->
+		<button id = "MemberList" th:onclick="'location.href=\'' + @{/jpa/memberList(page=0)}+ '\''">JPA Member List</button>
         <button id = "MemberRegistration" onclick="location.href='/jpa/memberRegistration';">JPA Member Registration</button>
     </main>
 </body>
