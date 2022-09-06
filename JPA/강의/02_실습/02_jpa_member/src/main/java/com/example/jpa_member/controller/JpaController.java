@@ -137,12 +137,28 @@ public class JpaController {
 		// 전화번호 검색 : 검색 조건이 전화번호일 때
 		else if (searchCategory.equals("phone")) {
 			System.out.println("휴대폰 검색");
-			members = memberRepository.findByPhoneContaining(searchKeyword, pageable);
+			/* members = memberRepository.findByPhoneContaining(searchKeyword, pageable); */
+			
+			// Like 검색1
+			/* members = memberRepository.findByPhoneLike(searchKeyword+"%", pageable); */
+			
+			// Like 검색2 : 와일드카드를 사용하지 않고 메서드 자체에서 이미 처리가 가능
+			members = memberRepository.findByPhoneStartsWith(searchKeyword, pageable);
 		}
 		// 전체 검색 : 검색 조건이 없을 때
 		else {
 			System.out.println("전체 검색");
-			members = memberRepository.findAll(pageable);
+			/* members = memberRepository.findAll(pageable); */
+			
+			// and, or 조건 검색
+			// *and
+			/*
+			 * members = memberRepository.findByNameAndId(searchCategory, searchKeyword,
+			 * pageable);
+			 */
+			
+			// *or
+			members = memberRepository.findByNameContainsOrIdContains(searchKeyword, searchKeyword, pageable);
 		}
 
 		// 페이징 관련 유용한 메서드
