@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -87,95 +88,159 @@ public class JpaController {
 		return "redirect:/";
 	}
 
-	// 회원 전체 조회 (READ)
+	// 회원 조회1 (READ)
 	// *defaultValue : 값이 들어오지 않았을 때 기본적으로 주어지는 값
 	// *@PageableDefault(출력 개수, 정렬 기준, 정렬 방향) : 페이징 기본 값 부여하는 방법(messages.properties 값을 가져와서 지정해 주지 않는 방법)
+	/*
+	 * @RequestMapping(value = "/jpa/memberList", method = RequestMethod.GET) public
+	 * String memberList(Model model,
+	 * 
+	 * @PageableDefault(size = 5, sort = "name", direction = Sort.Direction.ASC)
+	 * Pageable pageable,
+	 * 
+	 * @RequestParam(value = "searchKeyword", required = false, defaultValue = "")
+	 * String searchKeyword,
+	 * 
+	 * @RequestParam(value = "searchCategory", required = false, defaultValue = "")
+	 * String searchCategory) {
+	 * 
+	 * System.out.println("--------------------------------------");
+	 * System.out.println("searchCategory = " + searchCategory);
+	 * System.out.println("searchKeyword = " + searchKeyword);
+	 * System.out.println("--------------------------------------");
+	 * 
+	 * // 페이징 처리가 없을 때 회원 전체 조회 // *멤버 데이터를 모두 찾아서 배열 형태로 정의 // *JPA 방식이 아닌 경우의 처리
+	 * // *List<MemberDTO> memberList = memberService.getMemberList(); List<Member>
+	 * members = memberRepository.findAll();
+	 * 
+	 * // 페이징 처리가 있을 때 회원 전체 조회 // *페이징 관련해서 필요한 기능들 -> domain.Page,
+	 * domain.Pageable, domain.Sort(정렬 관련) // *size : 한 페이지당 노출 개수, page : 총 페이지 개수,
+	 * sort : 정렬 옵션 등 // *페이지 번호는 0부터 시작함 // *처음 페이징 적용 시 size default 값은 20개 // *뷰
+	 * 페이지단에서 적용할 값을 messages.properties 파일에 정의하고 사용할 수 있음
+	 * 
+	 * // 전체 조회를 할 때 사용하는 메서드 Page<Member> members =
+	 * memberRepository.findAll(pageable); // => 검색 조회를 하기 위해 변경한 메서드
+	 * 
+	 * Page<Member> members = memberRepository.findByNameContaining(searchKeyword,
+	 * pageable);
+	 * 
+	 * // => 카테고리 검색 조회를 하기 위해 변경한 메서드 Page<Member> members = null; // 검색 카테고리별로
+	 * 비교하여 해당하는 검색 메서드 호출 // 이름 검색 : 검색 조건이 이름일 때 if
+	 * (searchCategory.equals("name")) { System.out.println("이름 검색"); members =
+	 * memberRepository.findByNameContaining(searchKeyword, pageable); } // 아이디 검색 :
+	 * 검색 조건이 아이디일 때 else if (searchCategory.equals("id")) {
+	 * System.out.println("아이디 검색"); members =
+	 * memberRepository.findByIdContaining(searchKeyword, pageable); } // 전화번호 검색 :
+	 * 검색 조건이 전화번호일 때 else if (searchCategory.equals("phone")) {
+	 * System.out.println("휴대폰 검색"); members =
+	 * memberRepository.findByPhoneContaining(searchKeyword, pageable);
+	 * 
+	 * // Like 검색1 members = memberRepository.findByPhoneLike(searchKeyword+"%",
+	 * pageable);
+	 * 
+	 * // Like 검색2 : 와일드카드를 사용하지 않고 메서드 자체에서 이미 처리가 가능 members =
+	 * memberRepository.findByPhoneStartsWith(searchKeyword, pageable); } // 전체 검색 :
+	 * 검색 조건이 없을 때 else { System.out.println("전체 검색"); members =
+	 * memberRepository.findAll(pageable);
+	 * 
+	 * // and, or 조건 검색 // *and
+	 * 
+	 * members = memberRepository.findByNameAndId(searchCategory, searchKeyword,
+	 * pageable);
+	 * 
+	 * 
+	 * // *or members =
+	 * memberRepository.findByNameContainsOrIdContains(searchKeyword, searchKeyword,
+	 * pageable); }
+	 * 
+	 * // 페이징 관련 유용한 메서드 // *getTotalPages() : 총 페이지 수
+	 * System.out.println("getTotalPages = " + members.getTotalPages()); //
+	 * *getTotalElements() : 총 데이터 개수 System.out.println("getTotalElements = " +
+	 * members.getTotalElements()); // *getNumber() : 현재 페이지 번호
+	 * System.out.println("getNumber = " + members.getNumber()); // *getSize() : 한
+	 * 페이지 보여지는 데이터 개수 System.out.println("getSize = " + members.getSize()); //
+	 * *getSort() : 데이터 정렬 System.out.println("getSort = " + members.getSort()); //
+	 * *getPageable() : size, number, sort 3가지 값을 보여줌
+	 * System.out.println("getSort = " + members.getPageable());
+	 * 
+	 * model.addAttribute("members", members);
+	 * 
+	 * return "jpa/memberList"; }
+	 */
+
+	// 회원 조회2 (READ)
+	/*
+	 * @RequestMapping(value = "/jpa/memberList", method = RequestMethod.GET) public
+	 * String memberList2(Model model, Pageable pageable,
+	 * 
+	 * @RequestParam(value = "searchKeyword", required = false, defaultValue = "")
+	 * String searchKeyword) {
+	 * 
+	 * // *변수 초기화 Page<Member> members = null;
+	 * 
+	 * // searchKeyword가 비었을 때 if (searchKeyword.isEmpty()) {
+	 * System.out.println("전체 출력"); // *pageable.getPageNumber() : 현재 페이지를 숫자로 주게 되면
+	 * 페이지가 고정되므로 현재 페이지를 가져오는 메서드를 사용 pageable =
+	 * PageRequest.of(pageable.getPageNumber(), 4, Sort.by("name")); members =
+	 * memberRepository.findAll(pageable); } // searchKeyword(검색어)가 있을 때 else {
+	 * System.out.println("검색 출력"); // 검색1
+	 * 
+	 * members = memberRepository.findByNumGreaterThanEqualOrderByNameAsc(6,
+	 * pageable);
+	 * 
+	 * // 검색2
+	 * 
+	 * members = memberRepository.findByAgeLessThanEqualOrderByNameDesc(20,
+	 * pageable);
+	 * 
+	 * // 검색3
+	 * 
+	 * members = memberRepository.findByNameContainsOrderByName(searchKeyword,
+	 * pageable);
+	 * 
+	 * // 검색4 -- PageRequest.of() : Page 타입을 사용하여 페이징 구현 시 여러 기능 제공 // *기본적인 4가지
+	 * 파라미터 값 : 보여줄 페이지, 페이지당 출력 개수, 정렬 방향, 적용 컬럼명 pageable = PageRequest.of(0, 4,
+	 * Sort.Direction.DESC, "num"); // *pageable.getPageNumber() : 현재 페이지를 숫자로 주게 되면
+	 * 페이지가 고정되므로 현재 페이지를 가져오는 메서드를 사용 // *단일정렬
+	 * 
+	 * pageable = PageRequest.of(pageable.getPageNumber(), 4, Sort.Direction.ASC,
+	 * "name");
+	 * 
+	 * // *다중정렬 : age 내림차순(descending), name 오름차순(ascending, 알아보기 쉽게 명시하였음. 제거해도
+	 * 무방(디폴트값이 오름차순)) pageable = PageRequest.of(pageable.getPageNumber(), 4,
+	 * Sort.by("age").descending().and(Sort.by("name").ascending()));
+	 * 
+	 * members = memberRepository.findByNameContains(searchKeyword, pageable); }
+	 * 
+	 * model.addAttribute("members", members);
+	 * 
+	 * // 페이징 시 요청하는 searchKeyword가 초기화 되기 때문에 값을 들고 있을 수 있도록 같이 넘겨줘야함
+	 * model.addAttribute("searchKeyword", searchKeyword);
+	 * 
+	 * return "jpa/memberList"; }
+	 */
+
+	// 회원 조회3 (READ)
 	@RequestMapping(value = "/jpa/memberList", method = RequestMethod.GET)
-	public String memberList(Model model,
-			@PageableDefault(size = 5, sort = "name", direction = Sort.Direction.ASC) Pageable pageable,
-			@RequestParam(value = "searchKeyword", required = false, defaultValue = "") String searchKeyword,
-			@RequestParam(value = "searchCategory", required = false, defaultValue = "") String searchCategory) {
+	public String memberList3(Model model, Pageable pageable,
+			@RequestParam(value = "searchKeyword", required = false, defaultValue = "") String searchKeyword) {
 
-		System.out.println("--------------------------------------");
-		System.out.println("searchCategory = " + searchCategory);
-		System.out.println("searchKeyword = " + searchKeyword);
-		System.out.println("--------------------------------------");
-
-		// 페이징 처리가 없을 때 회원 전체 조회
-		// *멤버 데이터를 모두 찾아서 배열 형태로 정의
-		// *JPA 방식이 아닌 경우의 처리
-		// *List<MemberDTO> memberList = memberService.getMemberList();
-		/* List<Member> members = memberRepository.findAll(); */
-
-		// 페이징 처리가 있을 때 회원 전체 조회
-		// *페이징 관련해서 필요한 기능들 -> domain.Page, domain.Pageable, domain.Sort(정렬 관련)
-		// *size : 한 페이지당 노출 개수, page : 총 페이지 개수, sort : 정렬 옵션 등
-		// *페이지 번호는 0부터 시작함
-		// *처음 페이징 적용 시 size default 값은 20개
-		// *뷰 페이지단에서 적용할 값을 messages.properties 파일에 정의하고 사용할 수 있음
-
-		// 전체 조회를 할 때 사용하는 메서드
-		/* Page<Member> members = memberRepository.findAll(pageable); */
-		// => 검색 조회를 하기 위해 변경한 메서드
-		/*
-		 * Page<Member> members = memberRepository.findByNameContaining(searchKeyword,
-		 * pageable);
-		 */
-		// => 카테고리 검색 조회를 하기 위해 변경한 메서드
+		// 변수 초기화
 		Page<Member> members = null;
-		// 검색 카테고리별로 비교하여 해당하는 검색 메서드 호출
-		// 이름 검색 : 검색 조건이 이름일 때
-		if (searchCategory.equals("name")) {
-			System.out.println("이름 검색");
-			members = memberRepository.findByNameContaining(searchKeyword, pageable);
-		}
-		// 아이디 검색 : 검색 조건이 아이디일 때
-		else if (searchCategory.equals("id")) {
-			System.out.println("아이디 검색");
-			members = memberRepository.findByIdContaining(searchKeyword, pageable);
-		}
-		// 전화번호 검색 : 검색 조건이 전화번호일 때
-		else if (searchCategory.equals("phone")) {
-			System.out.println("휴대폰 검색");
-			/* members = memberRepository.findByPhoneContaining(searchKeyword, pageable); */
-			
-			// Like 검색1
-			/* members = memberRepository.findByPhoneLike(searchKeyword+"%", pageable); */
-			
-			// Like 검색2 : 와일드카드를 사용하지 않고 메서드 자체에서 이미 처리가 가능
-			members = memberRepository.findByPhoneStartsWith(searchKeyword, pageable);
-		}
-		// 전체 검색 : 검색 조건이 없을 때
-		else {
-			System.out.println("전체 검색");
-			/* members = memberRepository.findAll(pageable); */
-			
-			// and, or 조건 검색
-			// *and
-			/*
-			 * members = memberRepository.findByNameAndId(searchCategory, searchKeyword,
-			 * pageable);
-			 */
-			
-			// *or
-			members = memberRepository.findByNameContainsOrIdContains(searchKeyword, searchKeyword, pageable);
+
+		// 전체 출력 or 검색 출력
+		if (searchKeyword.isEmpty()) {
+			System.out.println("전체출력");
+			members = memberRepository.findAll(pageable);
+		} else {
+			System.out.println("검색출력");
+			pageable = PageRequest.of(pageable.getPageNumber(), 2, Sort.Direction.ASC, "name");
+			members = memberRepository.findByName(searchKeyword, pageable);
 		}
 
-		// 페이징 관련 유용한 메서드
-		// *getTotalPages() : 총 페이지 수
-		System.out.println("getTotalPages = " + members.getTotalPages());
-		// *getTotalElements() : 총 데이터 개수
-		System.out.println("getTotalElements = " + members.getTotalElements());
-		// *getNumber() : 현재 페이지 번호
-		System.out.println("getNumber = " + members.getNumber());
-		// *getSize() : 한 페이지 보여지는 데이터 개수
-		System.out.println("getSize = " + members.getSize());
-		// *getSort() : 데이터 정렬
-		System.out.println("getSort = " + members.getSort());
-		// *getPageable() : size, number, sort 3가지 값을 보여줌
-		System.out.println("getSort = " + members.getPageable());
-
+		// 객체리스트 전달
 		model.addAttribute("members", members);
+		model.addAttribute("searchKeyword", searchKeyword);
 
 		return "jpa/memberList";
 	}

@@ -20,20 +20,16 @@ public class MemberDTO {
     private String name;
     private String id;
     private String phone;
+    private int age;
 
     // toString
     @Override
-    public String toString() {
-        return "MemberDTO{" +
-               "num=" + num +
-               ", name='" + name + '\'' +
-               ", id='" + id + '\'' +
-               ", phone='" + phone + '\'' +
-               '}';
-    }
+	public String toString() {
+		return "MemberDTO [num=" + num + ", name=" + name + ", id=" + id + ", phone=" + phone + ", age=" + age + "]";
+	}
 
     // toEntity
     public Member toEntity() {
-        return new Member(num, name, id, phone);
+        return new Member(num, name, id, phone, age);
     }
 }

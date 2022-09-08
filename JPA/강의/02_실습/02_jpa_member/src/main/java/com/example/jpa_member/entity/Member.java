@@ -32,6 +32,8 @@ public class Member {
 	private String id;
 	@Column
 	private String phone;
+	@Column
+	private int age;
 
 	/*
 	 * // *롬북 어노테이션으로 대체 // *기본 생성자 => @NoArgsConstructor public Member() { }

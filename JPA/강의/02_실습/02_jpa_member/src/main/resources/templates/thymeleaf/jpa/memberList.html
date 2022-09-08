@@ -49,13 +49,23 @@
 		<!-- 검색3 종료 -->
 
 		<!-- 검색4 : Or 검색 시작 -->
-		<form th:action="@{/jpa/memberList}" method="GET" style="padding: 10px; border: 1px; width: 600px;" id="searchKeywordForm">
+		<!-- <form th:action="@{/jpa/memberList}" method="GET" style="padding: 10px; border: 1px; width: 600px;" id="searchKeywordForm">
 			<label for="searchKeyword">Or 검색</label> &nbsp;
 			<input type="text" id="searchKeyword" name="searchKeyword" placeholder="검색">
 			&nbsp;
 			<button type="submit">Search</button>
+		</form> -->
+		<!-- 검색4 종료 -->
+
+		<!-- 검색5 : 조건, 정렬 검색 시작 -->
+		<form th:action="@{/jpa/memberList}" method="GET" style="padding: 10px; border: 1px; width: 600px;" id="searchKeywordForm">
+			<label for="searchKeyword">조건 검색</label> &nbsp;
+			<!-- *autocomplete : 앞에서 입력한 값 자동완성 조정 -->
+			<input type="text" id="searchKeyword" name="searchKeyword" placeholder="검색" autocomplete="off">
+			&nbsp;
+			<button type="submit">Search</button>
 		</form>
-		<!-- 검색3 종료 -->
+		<!-- 검색5 종료 -->
 		<table cellpadding="10" border="1">
 
 			<thead>
@@ -64,6 +74,7 @@
 					<th>Name</th>
 					<th>Id</th>
 					<th>Phone</th>
+					<th>Age</th>
 					<th>Edit</th>
 					<th>Del</th>
 					<th>ConfirmDel</th>
@@ -78,6 +89,7 @@
 					</th>
 					<th th:text="${member.id}"></th>
 					<th th:text="${member.phone}"></th>
+					<th th:text="${member.age}"></th>
 					<!-- *th:href="@{Controller에 요청하는 주소(요청 http 뒤에 붙을 매개변수)}">수정</a></th>-->
 					<th>
 						<a href="#" th:href="@{/jpa/memberRegistration(num = ${member.num})}">수정</a>
@@ -111,17 +123,25 @@
 	<ul>
 		<!-- th:href="@{/jpa/memberList(page=1, size=2)}" : page -> 현재 페이지, size -> 페이지 출력 개수로 주소를 요청 -->
 		<!-- 뒤로가기 -->
-		<li th:if="${members.number == 0}"><span style="color: #999;">Previous</span></li>
+		<li th:if="${members.number == 0}">
+			<span style="color: #999;">Previous</span>
+		</li>
 		<!-- size=#{paging.size})} : messages.properties에서 설정한 페이지 사이즈 -->
 		<!-- 변경 전 : <li th:unless="${members.number == 0}"><a href="#" th:href="@{/jpa/memberList(page=${members.number-1}, size=#{paging.size})}">Previous</a></li> -->
 		<!-- JpaController에서 페이징 기본 값을 지정해 줬기 때문에 size 값을 날림 -->
-		<li th:unless="${members.number == 0}"><a href="#" th:href="@{/jpa/memberList(page=${members.number-1})}">Previous</a></li>
+		<li th:unless="${members.number == 0}">
+			<a href="#" th:href="@{/jpa/memberList(page=${members.number-1}, searchKeyword = ${searchKeyword})}">Previous</a>
+		</li>
 		<li>/</li>
 		<!-- 앞으로가기 -->
-		<li th:if="${members.totalPages == members.number+1}"><span style="color: #999;">Next</span></li>
+		<li th:if="${members.totalPages == members.number+1}">
+			<span style="color: #999;">Next</span>
+		</li>
 		<!-- 변경 전 : <li th:unless="${members.totalPages == members.number+1}"><a href="#" th:href="@{/jpa/memberList(page=${members.number+1}, size=#{paging.size})}">Next</a></li> -->
 		<!-- JpaController에서 페이징 기본 값을 지정해 줬기 때문에 size 값을 날림 -->
-		<li th:unless="${members.totalPages == members.number+1}"><a href="#" th:href="@{/jpa/memberList(page=${members.number+1})}">Next</a></li>
+		<li th:unless="${members.totalPages == members.number+1}">
+			<a href="#" th:href="@{/jpa/memberList(page=${members.number+1}, searchKeyword = ${searchKeyword})}">Next</a>
+		</li>
 	</ul>
 	<script>
 		// 삭제버튼 클릭 시 컨펌 후 처리
