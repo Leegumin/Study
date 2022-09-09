@@ -77,6 +77,12 @@ public interface MemberRepository extends JpaRepository<Member, Integer> {
 	// *기본 사용법 : @Query( JPQL 쿼리 )
 	// *회원 이름으로 검색하기 : 'm'은 Member as m 즉 약어로 지정해준 것, ?1은 메서드의 첫 번째의 파라미터 값을 의미(?1 = String name = searchKeyword)
 	/* @Query("SELECT m FROM Member m WHERE m.name = ?1 and m.age > 10") */
-	@Query("SELECT m FROM Member m WHERE m.name like %?1% and m.age > 10 ORDER BY m.name DESC")
+	/*
+	 * @Query("SELECT m FROM Member m WHERE m.name like %?1% and m.age > 10 ORDER BY m.name DESC"
+	 * )
+	 */
+	@Query("SELECT m FROM Member m WHERE (m.name like %?1%) and (m.age between 0 and 10) ORDER BY m.name DESC")
 	Page<Member> findByName(String name, Pageable pageable);
+	// * 쿼리메서드로 작성시 =>
+	Page<Member> findByNameContainsAndAgeBetweenOrderByNameDesc(String name, int a, int b, Pageable pageable);
 }
