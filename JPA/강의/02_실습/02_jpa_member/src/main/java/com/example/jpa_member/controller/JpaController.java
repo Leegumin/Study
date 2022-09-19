@@ -65,23 +65,35 @@ public class JpaController {
 		return "jpa/memberRegistration";
 	}
 
-	// 등록처리 (CREATE), 수정처리 (UPDATE)
+	// 등록처리 (CREATE), 수정처리 (UPDATE)1
+	/*
+	 * @RequestMapping(value = "/jpa/memberRegistration", method =
+	 * RequestMethod.POST) public String memberRegistration(Model model, MemberDTO
+	 * memberDTO) { logger.info("memberRegistration가 실행됨"); try {
+	 * logger.info("memberDTO : {}", memberDTO);
+	 * 
+	 * // 1. DTO를 Entity로 변환 Member member = memberDTO.toEntity();
+	 * logger.info("member : {}", member);
+	 * 
+	 * // 2. Repository로 Entity를 DB에 저장 // *memberDTO로 받은 정보 => Entity Member로 변환 =>
+	 * MemberRepository로 저장 // *save 메서드의 경우 기본 키 값이 없을 경우 등록(CREATE), 있을 경우
+	 * 수정(UPDATE)을 자동으로 처리 => 뷰페이지단에서 반드시 기본 키 값이 넘어와야한다는 소리임
+	 * memberRepository.save(member); } catch (Exception e) {
+	 * logger.info("insertMemberError : ", e); }
+	 * 
+	 * // *redirect:/ : 메인으로 다시 보냄 return "redirect:/"; }
+	 */
+
+	// 등록처리 (CREATE), 수정처리 (UPDATE)2
 	@RequestMapping(value = "/jpa/memberRegistration", method = RequestMethod.POST)
-	public String memberRegistration(Model model, MemberDTO memberDTO) {
+	public String memberRegistration(Model model, MemberDTO memberDTO, @RequestParam(required = false) int num,
+			@RequestParam(required = false) String name, @RequestParam(required = false) int age) {
 		logger.info("memberRegistration가 실행됨");
 		try {
-			logger.info("memberDTO : {}", memberDTO);
+			int saved = memberRepository.updateMemberQuery(num, name, age);
+			System.out.println("saved(수정된 레코드 갯수) = " + saved);
 
-			// 1. DTO를 Entity로 변환
-			Member member = memberDTO.toEntity();
-			logger.info("member : {}", member);
-
-			// 2. Repository로 Entity를 DB에 저장
-			// *memberDTO로 받은 정보 => Entity Member로 변환 => MemberRepository로 저장
-			// *save 메서드의 경우 기본 키 값이 없을 경우 등록(CREATE), 있을 경우 수정(UPDATE)을 자동으로 처리 => 뷰페이지단에서 반드시 기본 키 값이 넘어와야한다는 소리임
-			memberRepository.save(member);
 		} catch (Exception e) {
-			logger.info("insertMemberError : ", e);
 		}
 
 		// *redirect:/ : 메인으로 다시 보냄
@@ -221,27 +233,80 @@ public class JpaController {
 	 */
 
 	// 회원 조회3 (READ)
+	/*
+	 * @RequestMapping(value = "/jpa/memberList", method = RequestMethod.GET) public
+	 * String memberList3(Model model, Pageable pageable,
+	 * 
+	 * @RequestParam(value = "searchKeyword", required = false, defaultValue = "")
+	 * String searchKeyword) {
+	 * 
+	 * // 변수 초기화 Page<Member> members = null;
+	 * 
+	 * // 전체 출력 or 검색 출력 if (searchKeyword.isEmpty()) { System.out.println("전체출력");
+	 * members = memberRepository.findAll(pageable); } else {
+	 * System.out.println("검색출력"); pageable =
+	 * PageRequest.of(pageable.getPageNumber(), 2, Sort.Direction.ASC, "name");
+	 * members = memberRepository.findByName(searchKeyword, pageable); }
+	 * 
+	 * // 객체리스트 전달 model.addAttribute("members", members);
+	 * model.addAttribute("searchKeyword", searchKeyword);
+	 * 
+	 * return "jpa/memberList"; }
+	 */
+	
+	// 회원 조회4 (READ)
+	/*
+	 * @RequestMapping(value = "/jpa/memberList", method = RequestMethod.GET) public
+	 * String memberList3(Model model, Pageable pageable,
+	 * 
+	 * @RequestParam(required = false, defaultValue = "0") int from,
+	 * 
+	 * @RequestParam(required = false, defaultValue = "0") int to,
+	 * 
+	 * @RequestParam(required = false, defaultValue = "") String searchKeyword) {
+	 * 
+	 * // 변수 초기화 Page<Member> members = null;
+	 * 
+	 * // 전체 출력 or 검색 출력 if (searchKeyword.isEmpty()) { System.out.println("전체출력");
+	 * members = memberRepository.findAll(pageable); } else {
+	 * System.out.println("검색출력"); members =
+	 * memberRepository.findMembers(searchKeyword, from, to, pageable); }
+	 * 
+	 * // 객체리스트 전달 model.addAttribute("members", members);
+	 * model.addAttribute("searchKeyword", searchKeyword);
+	 * 
+	 * return "jpa/memberList"; }
+	 */
+	
+	// 회원 조회5 (READ)
 	@RequestMapping(value = "/jpa/memberList", method = RequestMethod.GET)
 	public String memberList3(Model model, Pageable pageable,
-			@RequestParam(value = "searchKeyword", required = false, defaultValue = "") String searchKeyword) {
-
+			@RequestParam(required = false) String id,
+			@RequestParam(required = false, defaultValue = "") String searchKeyword) {
+		
 		// 변수 초기화
 		Page<Member> members = null;
-
+		
 		// 전체 출력 or 검색 출력
 		if (searchKeyword.isEmpty()) {
 			System.out.println("전체출력");
 			members = memberRepository.findAll(pageable);
 		} else {
 			System.out.println("검색출력");
-			pageable = PageRequest.of(pageable.getPageNumber(), 2, Sort.Direction.ASC, "name");
-			members = memberRepository.findByName(searchKeyword, pageable);
+			boolean isMember = memberRepository.existsByName(searchKeyword);
+			logger.info("isMember : {}", isMember);
+			
+			int isExistCount = memberRepository.existsQuery(searchKeyword, id);
+			logger.info("isExistCount : {}", isExistCount);
+			
+			/* members = memberRepository.findByName(searchKeyword, pageable); */
+			members = memberRepository.selectAllSQL(pageable, searchKeyword); 
 		}
-
+		
 		// 객체리스트 전달
 		model.addAttribute("members", members);
 		model.addAttribute("searchKeyword", searchKeyword);
-
+		
 		return "jpa/memberList";
 	}
 

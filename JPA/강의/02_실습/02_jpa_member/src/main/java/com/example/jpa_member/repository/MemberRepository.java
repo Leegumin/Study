@@ -1,9 +1,13 @@
 package com.example.jpa_member.repository;
 
+import javax.transaction.Transactional;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import com.example.jpa_member.entity.Member;
 
@@ -83,6 +87,51 @@ public interface MemberRepository extends JpaRepository<Member, Integer> {
 	 */
 	@Query("SELECT m FROM Member m WHERE (m.name like %?1%) and (m.age between 0 and 10) ORDER BY m.name DESC")
 	Page<Member> findByName(String name, Pageable pageable);
+
 	// * 쿼리메서드로 작성시 =>
 	Page<Member> findByNameContainsAndAgeBetweenOrderByNameDesc(String name, int a, int b, Pageable pageable);
+
+	// JPQL의 다양한 사용법
+
+	// 1.@Query 애너테이션 + JPQL을 사용한 수정 처리
+	// *기본적으로 쿼리 애너테이션을 이용한 수정 처리시에는 추가시켜주는 애너테이션들이 있음
+	// * ? --> 순서 기반, : --> 이름 기반 (명시적인 매개변수명 일치시켜 사용)
+	// *@Modifying : 수정을 위한 어노테이션
+	// *@Transactional : 연산이 고립되어, 다른 연산과의 혼선으로 인해 잘못된 값을 가져오는 경우가 방지된다. 연산의 원자성이 보장되어, 연산이 도중에 실패할 경우 변경사항이 Commit되지 않는다.
+	@Modifying
+	@Transactional
+	@Query("UPDATE Member m SET m.name = :name, m.age = :age WHERE m.num = :num")
+	int updateMemberQuery(@Param("num") int num, @Param("name") String name, @Param("age") int age);
+
+	// 2.@Query 애너테이션 + JPQL을 사용한 LIKE 콜론(:) 파라미터 바인딩
+	// *변수 이름만 일치하면 메소드 정의에서 변수 순서를 맞춰줄 필요는 없음
+	@Query("SELECT m FROM Member m WHERE (m.name LIKE %:name%) AND (m.age BETWEEN :from AND :to) ORDER BY m.name ASC")
+	Page<Member> findMembers(@Param("name") String name, @Param("from") int from, @Param("to") int to,
+			Pageable pageable);
+
+	// EXISTS, COUNT 쿼리 메서드, 순수 SQL 사용
+	// *EXISTS : 존재여부만을 체크함, 보통 두 개의 테이블에서 같은 값을 가진 컬럼끼리 묶어서 -> 조건비교 -> 서브쿼리 형태로 사용됨. 한 개의 테이블에서도 서브쿼리로 사용
+	// *EXISTS 서브쿼리는 서브쿼리의 결과가 "한 건이라도 존재한다면" -> TRUE, 반대면 FALSE로 반환
+	// *서브쿼리의 조건에 일치하는 레코드가 한 건 이라도 있으면(TRUE라면) 즉시 쿼리를 멈추고 메인쿼리를 실행시킴
+	// *사용예시 : SELECT * FROM Member m WHERE (m.name LIKE '%순신%') AND EXISTS (SELECT 1 FROM Member mm.WHERE mm.age > 20);
+	// * 존재여부를 체크하는 방법
+	// *1. 쿼리 메서드 --> existsByName[Id], 2. @Query 애너테이션 + JPQL 쿼리 사용 --> JPQL은 순수 쿼리가 아니라 exists 사용 불가능
+	// *3. 대신 COUNT 쿼리를 사용하여 조회함
+	// *존재여부만 체크하기 때문에 boolean 타입을 사용함
+	boolean existsByName(String name);
+
+	// *COUNT : 개수를 체크함
+	// *이런식으로 처리 가능함. 공백 주의
+	@Query("SELECT count(m.num) "
+			+ "FROM Member m "
+			+ "WHERE m.name = :name AND m.id = :id")
+	int existsQuery(@Param(value = "name") String name, @Param(value="id") String id);
+	
+	// 3.일반 순수 SQL 쿼리
+	// JPA의 사용 목적과는 조금은 반대되는 부분일 수 있으므로 많이 권장하지는 않는 편임
+	// 그러나, 특정 데이터베이스의 함수나 기능을 사용하여 성능향상을 꾀하든지 또는 복잡한 쿼리나 지원하지 않는 경우 사용이 가능
+	// ; --> 세미클론 사용은 X
+	// @Query 애터네이션 + SQL --> value = "" --> 옵션 --> nativeQuery = true
+	@Query(value = "SELECT * FROM member m WHERE m.name LIKE %:searchKeyword% AND EXISTS (SELECT 1 FROM member mm WHERE mm.age < 10)", nativeQuery = true)
+	Page<Member> selectAllSQL(Pageable pageable, @Param("searchKeyword") String searchKeyword);
 }
