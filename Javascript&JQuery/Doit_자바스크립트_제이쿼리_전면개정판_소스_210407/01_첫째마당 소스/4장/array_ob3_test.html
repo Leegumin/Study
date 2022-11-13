@@ -4,8 +4,27 @@
 <meta charset = "UTF-8">
 <title> 배열객체 </title>
 <script>
-	var greenArr = ["교대", "방배", "강남"];
-	var yellowArr = ["미금","정자","수서"];
+	let greenArr = ["교대", "방배", "강남"];
+	let yellowArr = ["미금","정자","수서"];
+
+	document.write("greenArr : ", greenArr, "<br>");
+	document.write("yellowArr : ", yellowArr, "<br>");
+
+	greenArr.splice(2, 1, "서초", "역삼"); // 2번 인덱스부터 1개의 자료를 잘라내고, 서초와 역삼을 삽입
+	document.write("splice : ", greenArr, "<br>");
+
+	let data1 = yellowArr.pop(); // 마지막 인덱스의 데이터만 잘라서 반환
+	let data2 = yellowArr.shift(); // 첫번째 인덱스의 데이터만 잘라서 반환
+	document.write("yellowArr.pop : ", data1, "<br>");
+	document.write("yellowArr.shift : ", data2, "<br>");
+
+	document.write("yellowArr : ", yellowArr, "<br>"); // 현재 yellowArr의 상태
+
+	yellowArr.push(data2); // 잘라낸 데이터를 마지막 인덱스로 밀어넣음
+	document.write("yellowArr.push(data2) : ", yellowArr, "<br>");
+
+	yellowArr.unshift(data1); // 잘라낸 데이터를 제일 처음 인덱스로 밀어넣음
+	document.write("yellowArr.unshift(data1) : ", yellowArr, "<br>");
 
 </script>
 </head>

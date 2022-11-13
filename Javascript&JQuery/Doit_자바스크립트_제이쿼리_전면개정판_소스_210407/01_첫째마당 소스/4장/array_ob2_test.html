@@ -4,8 +4,26 @@
 <meta charset = "UTF-8">
 <title> 배열객체 </title>
 <script>
-		var arr_1 = ["사당", "교대", "방배", "강남"];
-		var arr_2 = ["신사", "압구정", "옥수"];
+		let arr_1 = ["사당", "교대", "방배", "강남"];
+		let arr_2 = ["신사", "압구정", "옥수"];
+
+		document.write("arr_1 : ", arr_1, "<br>");
+		document.write("arr_2 : ", arr_2, "<br>");
+
+		let result = arr_1.join("-"); //arr_1의 배열을 "-"로 연결하여 하나의 문자열로 변환
+		document.write("join: ", result, "<br>");
+
+		result = arr_1.concat(arr_2); //arr_1과 arr_2를 합체
+		document.write("concat: ", result, "<br>");
+
+		result = arr_1.slice(0, 2); //arr_1의 인덱스 0부터 시작, 2개의 요소를 잘라냄
+		document.write("slice: ", result, "<br>");
+
+		result = arr_1.sort(); //오름차순 정렬
+		document.write("sort: ", result, "<br>");
+
+		result = arr_2.reverse(); //배열을 거꾸로 뒤집음
+		document.write("reverse: ", result, "<br>");
 
 </script>
 </head>

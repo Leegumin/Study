@@ -4,7 +4,35 @@
 <meta charset = "UTF-8">
 <title> 문자 객체 </title>
 <script>
-	var str = "Hello Thank you good luck to you";
+	let str = "Hello Thank you good luck to you";
+
+	document.write("charAt(16) : ", str.charAt(16), "<br>"); // 인덱스 16번째의 문자를 반환
+	document.write("str.indexOf(\"you\") : ", str.indexOf("you"), "<br>"); // "you"가 위치한 인덱스 번호를 반환
+	document.write("str.indexOf('you', 16) : ", str.indexOf("you", 16), "<br>"); // 16반쩨 인덱스 부터 시작해서 "you"가 위치한 인덱스 번호를 반환
+	document.write("str.lastIndexOf(\"you\") : ", str.lastIndexOf("you"), "<br>"); // 오른쪽에서 시작해서 왼쪽으로 "you"가 위치한 인덱스 번호를 반환
+	document.write("str.lastIndexOf(\"you\", 25) : ", str.lastIndexOf("you", 25), "<br>"); // 25번째 인덱스부터 시작해서 왼쪽으로 "you"가 위치한 인덱스 번호를 반환
+	document.write("str.match(\"luck\") : ", str.match("luck"), "<br>"); // 문자열 왼쪽에서 부터 제일 먼저 발견된 "luck"와 일치되는 문자를 찾아 반환
+	document.write("str.search(\"luck\") : ", str.search("luck"), "<br>"); // 문자열 왼쪽에서 부터 제일 먼저 발견된 "luck"와 일치되는 인덱스 번호를 찾아서 반환
+	document.write("str.substr(21, 4) : ", str.substr(21, 4), "<br>"); // 21번째 인덱스부터 시작하여 문자 4개를 반환
+	document.write("str.substring(6, 12) : ", str.substring(6, 12), "<br>"); //인덱스 6부터 12까지의 문자를 가져옴
+	document.write("str.replace(\"you\", \"me\") : ", str.replace("you", "me"), "<br>"); //문자열에서 "you"를 찾아 "me"로 치환
+	document.write("str.toLowerCase() : ", str.toLowerCase(), "<br>"); //문자열을 전부 소문자로 변환
+	document.write("str.toUpperCase() : ", str.toUpperCase(), "<br>"); //문자열을 전부 대문자로 변환
+	document.write("str.length : ", str.length, "<br>"); //문자열 개수(길이)를 반환
+
+	let s = str.split(" "); // 공백을 기준으로 문자 분리
+	document.write("s[0] : ", s[0], "<br>");
+	document.write("s[1] : ", s[1], "<br>");
+	document.write("s[2] : ", s[2], "<br>");
+	document.write("s[3] : ", s[3], "<br>");
+	document.write("s[4] : ", s[4], "<br>");
+	document.write("s[5] : ", s[5], "<br>");
+	document.write("s[6] : ", s[6], "<br>");
+
+	let t = "A";
+	let r = t.charCodeAt(0); // 변수 t의 0번째 인덱스 문자를 아스키코드 값으로 반환
+	document.write("r : ", r, "<br>");
+	document.write("String.fromCharCode(r) : ", String.fromCharCode(r), "<br>"); // 아스키코드 값 r을 문자로 반환
 
 </script>
 </head>

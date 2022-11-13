@@ -4,7 +4,13 @@
 <meta charset = "UTF-8">
 <title> 문자 객체 </title>
 <script>
+    let userName = prompt("당신의 영문 이름은?", "");
+    let upperName = userName.toUpperCase();
+    document.write("영문이름 : ", upperName, "<br>");
 
+    let userNum = prompt("당신의 연락처는?", "");
+    let result = userNum.substring(0, userNum.length - 4) + "****"; //0인덱스부터 마지막 4자리수를 제외한 인덱스까지만 번호를 가져오고 뒤에 4자리수는 ****로 대체
+    document.write("전화번호 : ", result, "<br>");
 </script>
 </head>
 <body>

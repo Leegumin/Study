@@ -4,11 +4,35 @@
 <meta charset = "UTF-8">
 <title> 문자 객체 </title>
 <script>
-	var userEmail = prompt("당신의 이메일 주소는?", "");
-	var arrUrl = [".co.kr", ".com", ".net", ".or.kr", ".go.kr"];
+	let userEmail = prompt("당신의 이메일 주소는?", "");
+	let arrUrl = [".co.kr", ".com", ".net", ".or.kr", ".go.kr"];
 
-	var check1 = false;
-	var check2 = false;
+	let check1 = false;
+	let check2 = false;
+
+	if (userEmail.indexOf("@") > 0 ) // userEmail에 indexOf로 검사하여 @가 있다면 1을 없다면 -1을 반환
+	{
+		check1 = true;
+	}
+
+	for (let i = 0; i < arrUrl.length; i++) 
+	{
+		if (userEmail.indexOf(arrUrl[i])) // arrUrl을 하나씩 검사해서 유저 이메일 중 일치하는게 있다면 true를 반환
+		{
+			check2 = true;
+		}
+	}
+
+	if (check1&&check2) 
+	{
+		document.write(userEmail);	
+	}
+	else
+	{
+		document.write("이메일 형식이 잘못됐습니다.")
+	}
+
+
 </script>
 </head>
 <body>
