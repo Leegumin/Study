@@ -7,6 +7,17 @@
 	var addNum = 0;
 	var subNum = 1000;
 
+    let auto_1 = setInterval(() => {
+        addNum++;
+        console.log("addNum : "+ addNum);
+    }, 3000);
+
+    let auto_2 = setInterval(() => {
+        subNum--;
+        console.log("subNum : "+ subNum);
+    }, 3000);
+
+
 </script>
 </head>
 <body>
@@ -14,5 +25,6 @@
     <p> 콘솔 패널을 열어 확인하세요.</p>
    <button onclick="clearInterval(auto_1)">증가 정지</button>
    <button onclick="clearInterval(auto_2)">감소 정지</button>
+   <div id="dd">dd</div>
 </body>
 </html>
